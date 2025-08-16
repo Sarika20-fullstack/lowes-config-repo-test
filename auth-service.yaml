@@ -5,7 +5,7 @@ spring:
   data:
     mongodb:
       # Injected from K8s Secret via env var
-      uri: mongodb://admin:secret@mongo-db:27017/authDB?authSource=admin
+      uri: mongodb://admin:secret@localhost:27017/authDB?authSource=admin
 
   jackson:
     serialization:
@@ -34,4 +34,5 @@ management:
     web:
       exposure:
         include: health,info
+
 
