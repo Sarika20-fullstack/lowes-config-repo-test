@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://postgres-order:5432/order-service
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+  devtools:
+    restart:
+      enabled: true
+
+# Uncomment if you need detailed logging
+# logging:
+#   level:
+#     com.capstone.scloud: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://registry-service:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

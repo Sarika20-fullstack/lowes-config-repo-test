@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: notification-service
+
+  datasource:
+    url: jdbc:postgresql://postgres-notification:5432/notification-service
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+  devtools:
+    restart:
+      enabled: true
+
+logging:
+  level:
+    com.capstone.scloud: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://registry-service:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
+
