@@ -76,7 +76,7 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: http://registry-service:8761/eureka
+      defaultZone: http://localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
 
@@ -95,3 +95,4 @@ management:
     web:
       exposure:
         include: '*'
+
