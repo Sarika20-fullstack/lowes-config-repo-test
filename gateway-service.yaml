@@ -4,17 +4,15 @@ server:
 spring:
   application:
     name: gateway-service
-
   cloud:
     gateway:
       default-filters:
         - name: AuthenticationFilter
-
       routes:
         - id: supplier-route
           uri: lb://supplier-service
           predicates:
-            - Path=/matchx/api/suppliers/**, /matchx/api/suppliers/v3/api-docs
+            - Path=/matchx/api/suppliers/**,/matchx/api/suppliers/v3/api-docs
           filters:
             - StripPrefix=2
             - name: CircuitBreaker
@@ -25,7 +23,7 @@ spring:
         - id: product-route
           uri: lb://product-service
           predicates:
-            - Path=/matchx/api/products/**, /matchx/supplier/swagger-ui/**
+            - Path=/matchx/api/products/**,/matchx/api/products/v3/api-docs   # fixed
           filters:
             - StripPrefix=2
             - name: CircuitBreaker
@@ -36,14 +34,14 @@ spring:
         - id: auth-route
           uri: lb://auth-service
           predicates:
-            - Path=/matchx/api/auth/**, /matchx/api/users/**
+            - Path=/matchx/api/auth/**,/matchx/api/users/**
           filters:
             - StripPrefix=2
 
         - id: order-route
           uri: lb://order-service
           predicates:
-            - Path=/matchx/api/orders/**, /matchx/api/orders/v3/api-docs
+            - Path=/matchx/api/orders/**,/matchx/api/orders/v3/api-docs
           filters:
             - StripPrefix=2
             - name: CircuitBreaker
@@ -54,7 +52,7 @@ spring:
         - id: order-matching-route
           uri: lb://order-matching-service
           predicates:
-            - Path=/matchx/api/order-matching/**, /matchx/api/order-matching/v3/api-docs
+            - Path=/matchx/api/order-matching/**,/matchx/api/order-matching/v3/api-docs
           filters:
             - StripPrefix=2
             - name: CircuitBreaker
@@ -75,52 +73,17 @@ springdoc:
       - name: Order Matching Service
         url: /matchx/api/order-matching/v3/api-docs
 
-resilience4j:
-  circuitbreaker:
-    instances:
-      supplierCircuitBreaker:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-
-      productCircuitBreaker:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-
-      orderCircuitBreaker:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-
-      orderMatchingCircuitBreaker:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://registry-service:8761/eureka
     register-with-eureka: true
     fetch-registry: true
 
 security:
   jwt:
-    secret-key: 4748930e83a74df3ec63ab8cefc28684dc1ae4a74ecfe3f2343cee5543af2168
-    token-duration: 30m
+    secret-key: ${JWT_SECRET:4748930e83a74df3ec63ab8cefc28684dc1ae4a74ecfe3f2343cee5543af2168}
+    token-duration: 1d   # prefer lowercase
 
 logging:
   level:
@@ -132,5 +95,3 @@ management:
     web:
       exposure:
         include: '*'
-
-
